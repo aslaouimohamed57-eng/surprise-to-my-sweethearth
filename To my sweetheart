@@ -1,0 +1,198 @@
+رائع 🌹✨ رح أضيف لك ورود حمراء متساقطة تتحرك على الشاشة لتعطي تأثير احتفالي جميل، وكأنها بتسقط من الأعلى أثناء عرض الموقع.
+
+
+---
+
+📄 الكود النهائي مع ورود متساقطة
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عيد ميلاد سعيد 🎂</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Tahoma", sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* خلفية ورود ثابتة */
+    .roses-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://i.imgur.com/0b7QX4r.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.2;
+      z-index: -2;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-top: 20px;
+      text-shadow: 2px 2px 5px #000;
+    }
+    .cake {
+      width: 200px;
+      margin: 20px auto;
+      position: relative;
+    }
+    .candle {
+      width: 15px;
+      height: 50px;
+      background: yellow;
+      margin: 0 auto;
+      position: relative;
+    }
+    .flame {
+      width: 15px;
+      height: 25px;
+      background: orange;
+      border-radius: 50% 50% 50% 50%;
+      position: absolute;
+      top: -25px;
+      left: 0;
+      animation: flicker 0.3s infinite alternate;
+    }
+    @keyframes flicker {
+      from { transform: scale(1); opacity: 1; }
+      to { transform: scale(1.2); opacity: 0.7; }
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background: #ff4e50;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e73c7e;
+    }
+    .message {
+      margin-top: 30px;
+      font-size: 1.3em;
+      display: none;
+      text-shadow: 2px 2px 4px #000;
+      background-color: rgba(255, 0, 0, 0.3);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+    }
+
+    /* ورود متساقطة */
+    .petal {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      background-image: url('https://i.imgur.com/I5Wc4kL.png'); /* ورود صغيرة */
+      background-size: cover;
+      pointer-events: none;
+      z-index: -1;
+      animation-name: fall;
+      animation-timing-function: linear;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="roses-bg"></div>
+
+  <h1>🎉 عيد ميلاد سعيد يا حبيبتي 🎉</h1>
+  <div class="cake">
+    <img src="https://i.imgur.com/3ZQ3Z9O.png" alt="cake" width="200">
+    <div class="candle">
+      <div class="flame" id="flame"></div>
+    </div>
+  </div>
+  <button onclick="startMic()">✨ اضغطي و انفخي الشمعة 🎤</button>
+  <div class="message" id="message">💖 أحبك من كل قلبي، كل عام وأنتِ أجمل ما في حياتي 💖</div>
+
+  <script>
+    let audioContext, analyser, dataArray;
+
+    function startMic() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const source = audioContext.createMediaStreamSource(stream);
+          analyser = audioContext.createAnalyser();
+          analyser.fftSize = 256;
+          const bufferLength = analyser.frequencyBinCount;
+          dataArray = new Uint8Array(bufferLength);
+          source.connect(analyser);
+          detectBlow();
+        })
+        .catch(err => {
+          alert("⚠️ الميكروفون غير مفعل!");
+        });
+
+      createPetals(); // يبدأ تساقط الورود
+    }
+
+    function detectBlow() {
+      requestAnimationFrame(detectBlow);
+      analyser.getByteFrequencyData(dataArray);
+      let volume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+      if (volume > 50) { 
+        document.getElementById("flame").style.display = "none";
+        document.getElementById("message").style.display = "block";
+      }
+    }
+
+    // تساقط الورود
+    function createPetals() {
+      for (let i = 0; i < 15; i++) { // عدد الورود المتساقطة
+        let petal = document.createElement('div');
+        petal.classList.add('petal');
+        petal.style.left = Math.random() * window.innerWidth + 'px';
+        petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+        petal.style.animationDelay = (Math.random() * 5) + 's';
+        document.body.appendChild(petal);
+      }
+      setTimeout(createPetals, 7000); // إعادة إنشاء ورود كل 7 ثواني
+    }
+  </script>
+</body>
+</html>
+
+
+---
+
+✅ مميزات التحديث:
+
+1. ورود ثابتة شفافة في الخلفية.
+
+
+2. ورود صغيرة متساقطة تتحرك بشكل طبيعي عبر الشاشة عند بدء الموقع.
+
+
+3. الشمعة لا تزال تتفاعل مع الصوت، وتظهر رسالة الحب عند النفخ.
+
+
+
+
+---
+
+إذا أحببت، أقدر أضيف تأثير موسيقي احتفالي أو أصوات نفخ حقيقية بحيث عند النفخ تظهر موسيقى عيد ميلاد خفيفة 🎶 ليصبح الموقع أكثر تفاعلية ورومانسية.
+
+هل تريد أن أفعل هذا أيضًا؟
+
